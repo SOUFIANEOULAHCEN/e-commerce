@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../ui/Button";
+import { Button } from "@/components/ui/button";
 
 const LoginForm = () => {
   const [inputsValues, SetInputsValues] = useState({
@@ -48,11 +48,10 @@ const LoginForm = () => {
       </div>
       <div className="w-full my-1">
         <Button
-          name={"Sign In"}
-          BgColor={"gray-950"}
-          BgHover={"gray-900"}
-          type={"button"}
-        ></Button>
+          className="bg-gray-950 w-full text-gray-100 hover:bg-gray-800 hover:text-gray-100"
+        >
+          Log in
+        </Button>
       </div>
     </form>
   );
