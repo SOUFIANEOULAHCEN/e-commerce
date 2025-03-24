@@ -122,7 +122,8 @@ const login = async (req, res) => {
 
 const getAllusers = async (req, res) => {
   try {
-    const users = await User.find({}, { password: 0 });
+    // const users = await User.find({}, { password: 0 }).exec();
+    const users = await User.find().exec();
     return res.status(200).json({ users });
   } catch (error) {
     console.log(error.message);

@@ -1,6 +1,7 @@
 import React from "react";
 import SignupForm from "../../components/SignupForm";
-import { Button } from "@/components/ui/button";
+// import { Button } from "components/ui/button";
+import { Button } from "../../components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {

@@ -10,6 +10,7 @@ const router = express.Router();
 router.post("/register", register);
 
 router.post("/login", login);
-router.get("/allusers", verifyToken, getAllusers);
+// router.get("/allusers", verifyToken, getAllusers);
+router.get("/allusers", getAllusers);
 /* -------------------------------------------------------------------------- */
 module.exports = router;

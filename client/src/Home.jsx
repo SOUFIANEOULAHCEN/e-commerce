@@ -3,7 +3,7 @@ import Login from './pages/auth/Login'
 
 const Home = () => {
   return (
-    <div className='text-red-500 text-3xl'>
+    <div className=''>
       <Login></Login>
     </div>
   )
