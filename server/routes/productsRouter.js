@@ -7,6 +7,7 @@ const {
   deleteAllProducts,
   deleteProductByCode,
 } = require("../controller/ProductsController");
+const { verifyToken } = require("../middleware/isAuth");
 
 const routerProduct = express.Router();
 

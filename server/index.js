@@ -4,6 +4,7 @@ const productRouter = require("./routes/productsRouter");
 const connectionDb = require("./config/ConnectDb");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const verifyToken = require("./middleware/isAuth");
 // -----------------------------------------
 
 require("dotenv").config();

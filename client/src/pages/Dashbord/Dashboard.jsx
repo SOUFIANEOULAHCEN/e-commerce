@@ -2,14 +2,10 @@ import { useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Products from "../Products";
+import Charts from "../Charts";
 
-const BarChart = () => (
-  <div className="p-6 text-white">📊 Bar Chart Content</div>
-);
 const Search = () => <div className="p-6 text-white">🔍 Search Content</div>;
-const Settings = () => (
-  <div className="p-6 text-white">⚙️ Settings Content</div>
-);
+const Settings = () => <div className="p-6 text-white"> Settings Content</div>;
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState("products");
@@ -21,11 +17,11 @@ const Dashboard = () => {
 
         <main className="flex-1 px-6 py-2 w-full">
           <SidebarTrigger />
-          
+
           {activePage === "products" && <Products />}
-          {activePage === "barchart" && <BarChart />}
-          {activePage === "search" && <Search />}
-          {activePage === "settings" && <Settings />}
+          {activePage === "barchart" && <Charts />}
+          {/* {activePage === "search" && <Search />}
+          {activePage === "settings" && <Settings />} */}
         </main>
       </div>
     </SidebarProvider>

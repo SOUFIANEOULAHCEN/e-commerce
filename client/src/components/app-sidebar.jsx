@@ -13,9 +13,9 @@ import {
 
 const items = [
   { title: "Products", url: "products", icon: ShoppingCart },
-  { title: "BarChart", url: "barchart", icon: BarChart },
-  { title: "Search", url: "search", icon: Search },
-  { title: "Settings", url: "settings", icon: Settings },
+  { title: "Charts", url: "barchart", icon: BarChart },
+  // { title: "Search", url: "search", icon: Search },
+  // { title: "Settings", url: "settings", icon: Settings },
 ];
 
 export function AppSidebar({ activePage, setActivePage }) {
