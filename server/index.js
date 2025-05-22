@@ -25,5 +25,5 @@ app.use("/products", productRouter);
 // -----------------------------------------------
 
 app.listen(port, () => {
-  console.log(`connected on ${port}`);
+  console.log(`Server running on port ${port}`);
 });

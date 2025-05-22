@@ -1,6 +1,7 @@
 import axios from "axios";
 import ProductForm from "../components/ProductForm";
 import UpdateForm from "../components/UpdateForm";
+import { API_ENDPOINTS } from "@/config/api";
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { FaCaretRight, FaCaretLeft } from "react-icons/fa6";
@@ -25,7 +26,7 @@ const Products = () => {
   const getProducts = async () => {
     setLoading(true);
     try {
-      const products = await axios.get("http://localhost:4000/products");
+      const products = await axios.get(API_ENDPOINTS.PRODUCTS.BASE);
       console.log(products.data);
       setTimeout(() => {
         setLoading(false);
@@ -41,9 +42,7 @@ const Products = () => {
   const deleteProduct = async (code) => {
     setLoading(true);
     try {
-      const product = await axios.delete(
-        `http://localhost:4000/products/delete/${code}`
-      );
+      const product = await axios.delete(API_ENDPOINTS.PRODUCTS.DELETE(code));
       console.log(product.data);
       getProducts();
       setCurrentPage(currentPage - 1);

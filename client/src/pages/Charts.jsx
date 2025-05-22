@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_ENDPOINTS } from "@/config/api";
 import { Line, Doughnut, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -29,7 +30,7 @@ function Charts() {
 
   const getProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/products");
+      const response = await axios.get(API_ENDPOINTS.PRODUCTS.BASE);
       console.log(response.data);
       setProducts(response.data);
     } catch (error) {

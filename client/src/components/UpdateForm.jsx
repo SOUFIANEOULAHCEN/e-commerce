@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/contexts/ToastContext";
 
 function UpdateForm({ UpdatedProduct, setUpdateProduct ,  getProducts }) {
   console.log(setUpdateProduct);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const { error: showErrorToast, success: showSuccessToast } = useToast();
   const [formData, setFormData] = useState({
     name: UpdatedProduct.name || "",
     description: UpdatedProduct.description || "",
@@ -24,16 +24,15 @@ function UpdateForm({ UpdatedProduct, setUpdateProduct ,  getProducts }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(false);
+
 
     try {
       await axios.put(
         `http://localhost:4000/products/edit/${UpdatedProduct.code}`,
         formData
       );
-      setSuccess(true);
-
+      showSuccessToast("Produit modifié avec succès !");
+      
       setFormData({
         name: "",
         description: "",
@@ -53,14 +52,14 @@ function UpdateForm({ UpdatedProduct, setUpdateProduct ,  getProducts }) {
       }, 1000);
       
     } catch (err) {
-      setError("Erreur lors de l'ajout du produit. Vérifiez les champs.");
+      showErrorToast("Erreur lors de la modification du produit. Vérifiez les champs.");
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="w-full md:w-4/5 mx-auto p-6 bg-gray-100 bg-opacity-70 shadow-md rounded-lg">
+    <div className="w-full md:w-4/5 mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-200">
       <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
           Modifier un Produit
@@ -72,12 +71,7 @@ function UpdateForm({ UpdatedProduct, setUpdateProduct ,  getProducts }) {
           X
         </button>
       </div>
-      {success && (
-        <p className="text-green-600 text-xl bg-green-400 text-center px-6 py-2 w-full mb-4">
-          Produit modifie avec succès !
-        </p>
-      )}
-      {error && <p className="text-red-600 mb-4">{error}</p>}
+
 
       <form onSubmit={handleSubmit} className="space-y-4 w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -91,7 +85,7 @@ function UpdateForm({ UpdatedProduct, setUpdateProduct ,  getProducts }) {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full p-2 border text-gray-700 border-gray-300 rounded-lg"
+                className="w-full p-2 border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 required
               />
             </div>

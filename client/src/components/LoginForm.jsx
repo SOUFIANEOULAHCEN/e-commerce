@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-// import { Button } from "components/ui/button";
-import { Button } from "./ui/button";
-import { redirect, useNavigate } from "react-router-dom";
+import { API_ENDPOINTS } from "@/config/api";
+import { useNavigate, Link } from "react-router-dom";
+import { useToast } from "@/contexts/ToastContext";
+import { InputEnhanced } from "./ui/input-enhanced";
+import { ButtonAnimated } from "./ui/button-animated";
+import { Mail, Lock, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -10,85 +14,131 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
-  const [Showerror, setShowError] = useState(false);
-  const [error, setError] = useState(null);
+  const { error: showErrorToast, success: showSuccessToast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/auth/login", {
+      const response = await axios.post(API_ENDPOINTS.AUTH.LOGIN, {
         email: inputsValues.email,
         password: inputsValues.password,
       });
 
-      // Handle successful login (e.g., store token, redirect, etc.)
-      console.log("Login successful:", response.data);
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed"); // Display error message
-      console.error("Login error:", err);
-      setShowError(true);
+      // Handle successful login
+      showSuccessToast("Connexion réussie ! Redirection...");
       setTimeout(() => {
-        setShowError(false);
-      }, 1500);
+        navigate("/dashboard");
+      }, 1000);
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Échec de la connexion";
+      showErrorToast(errorMessage);
+      console.error("Login error:", err);
     }
   };
 
+  const formVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.6,
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="w-4/5 h-auto">
-      <h1 className="text-center text-2xl font-bold mb-3">Login</h1>
-
-      {Showerror && (
-        <p className="text-red-600 text-center w-full bg-red-300 px-6 py-2 rounded-md">
-          {error}
-        </p>
-      )}
-
-      <div className="w-full my-1">
-        <label htmlFor="email" className="text-lg font-bold">
-          Email
-        </label>
-        <input
-          className="w-full border-2 px-2 py-1 my-1 text-sm font-semibold"
-          type="email"
-          required
-          minLength={5}
-          name="email"
-          id="email"
-          placeholder="Enter your email"
-          value={inputsValues.email}
-          onChange={(e) =>
-            setInputsValues({ ...inputsValues, email: e.target.value })
-          }
-        />
-      </div>
-      <div className="w-full my-1">
-        <label htmlFor="password" className="text-lg font-bold">
-          Password
-        </label>
-        <input
-          className="w-full border-2 px-2 py-1 my-1 text-sm font-semibold"
-          type="password"
-          required
-          minLength={2}
-          name="password"
-          id="password"
-          placeholder="Enter your password"
-          value={inputsValues.password}
-          onChange={(e) =>
-            setInputsValues({ ...inputsValues, password: e.target.value })
-          }
-        />
-      </div>
-      <div className="w-full my-1">
-        <Button
-          className="bg-gray-950 w-full text-gray-100 hover:bg-gray-800 hover:text-gray-100"
-          type="submit" // Ensure the button submits the form
-        >
-          Log in
-        </Button>
-      </div>
-    </form>
+    <div className="w-full min-h-screen flex items-center justify-center">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={formVariants}
+        className="w-full max-w-md mx-auto"
+      >
+        <form onSubmit={handleSubmit} className="relative overflow-hidden w-full p-8 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100">
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-gray-900 to-gray-700"></div>
+          
+          <motion.div variants={itemVariants} className="text-center mb-8">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Connexion</h1>
+            <p className="text-gray-500 mt-2">Accédez à votre compte</p>
+          </motion.div>
+  
+          <div className="space-y-5">
+            <motion.div variants={itemVariants} className="w-full">
+              <InputEnhanced
+                type="email"
+                required
+                minLength={5}
+                name="email"
+                id="email"
+                label="Email"
+                icon={<Mail className="h-4 w-4" />}
+                placeholder="Entrez votre email"
+                value={inputsValues.email}
+                onChange={(e) =>
+                  setInputsValues({ ...inputsValues, email: e.target.value })
+                }
+                className="transition-all duration-300 focus-within:ring-2 focus-within:ring-gray-900/50"
+              />
+            </motion.div>
+            
+            <motion.div variants={itemVariants} className="w-full">
+              <InputEnhanced
+                type="password"
+                required
+                minLength={2}
+                name="password"
+                id="password"
+                label="Mot de passe"
+                icon={<Lock className="h-4 w-4" />}
+                placeholder="Entrez votre mot de passe"
+                value={inputsValues.password}
+                onChange={(e) =>
+                  setInputsValues({ ...inputsValues, password: e.target.value })
+                }
+                className="transition-all duration-300 focus-within:ring-2 focus-within:ring-gray-900/50"
+              />
+            </motion.div>
+            
+            <motion.div variants={itemVariants} className="flex justify-end">
+              <Link to="/forgot-password" className="text-sm text-gray-900 hover:text-gray-700 transition-colors duration-200">
+                Mot de passe oublié ?
+              </Link>
+            </motion.div>
+            
+            <motion.div variants={itemVariants} className="w-full pt-4">
+              <ButtonAnimated
+                className="w-full group relative overflow-hidden bg-gradient-to-r from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600 text-white font-medium py-3 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
+                type="submit"
+                variant="gradient"
+                animation="ripple"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  Se connecter
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              </ButtonAnimated>
+            </motion.div>
+            
+            <motion.div variants={itemVariants} className="text-center mt-6">
+              <p className="text-gray-500">
+                Pas encore de compte ?{" "}
+                <Link to="/signup" className="text-gray-900 hover:text-gray-700 font-medium transition-colors duration-200">
+                  S'inscrire
+                </Link>
+              </p>
+            </motion.div>
+          </div>
+        </form>
+      </motion.div>
+    </div>
   );
 };
 
